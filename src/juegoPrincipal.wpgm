@@ -5,8 +5,8 @@ program juegoPrincipal {
 	
 	juego.iniciar()
 	game.cellSize(50)
-	game.title("Charlie Circus")
-	game.boardGround("background.gif")
+	game.title("road fighter")
+	game.boardGround("fondo.jpeg")
 	game.start()	
 	
 }

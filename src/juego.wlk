@@ -2,107 +2,134 @@ import wollok.game.*
 
 object juego {
 	
-	var aroDeFuego
-	
+		var property autoAmarillo //creo una variable que utilizare luego para inicializar mi objeto
+		
 	method iniciar(){
 		
-		game.addVisualCharacter(charlie)
+		game.addVisualCharacter(autoRojo)
+		game.addVisual(camion)
 		
 		self.tamanio() //Tamanio del tablero
 		
-		/*game.onCollideDo(charlie,{
-			elemento => elemento.chocoCharlie()
-		})*/
+		game.onTick(100, "movete", {
+			autoRojo.act()
+			camion.act()
+			fondo.act()
+		})
 		
-		self.generarAros()
-		self.generarMonedas()
-	}
-	
-	method generarAros() {
-		game.onTick(1000, "agregar aro", {self.generarAro()}) //Se generan de manera iterativa
-	}
-	
-	method generarMonedas(){
-		game.schedule(500, {self.generarMoneda()})
-	}
-	
-	method generarMoneda() {
-		const moneda = new Moneda()
-		game.addVisual(moneda)
+		keyboard.left().onPressDo{autoRojo.moverIzquierda()}
+		keyboard.right().onPressDo{autoRojo.moverDerecha()}
 		
-	}
-	method generarAro() {
-		if(aroDeFuego == null){
-		 aroDeFuego = new AroDeFuego()
-		 game.addVisual(aroDeFuego)
-         aroDeFuego.moverse()
-		}
+		self.generAutosAmarillos()
 	}
 	
-	method tamanio() {
+	method tamanio(){
 		game.width(15)
-		game.height(8)
+		game.height(15)
 	}
 	
-
-}
-
-object charlie {
-	
-	var property position = game.at(1, game.center().y())
-	
-	var puntos
-	//var property position //Asi puedo hacer que charlie se mueva
-	
-	method aumentarPuntos(){
-		puntos += 1
-	}
-		
-	method image () = "charlie.png"
-	
-	method position (pos){
-		position = pos
+	method generAutosAmarillos() {
+		game.schedule(5000, {self.generAutoAmarillo()})
 	}
 	
-	
-	
-}
-
-class AroDeFuego{
-	
-	var property position = game.at(game.width() - 1 , game.center().y()) // Posición inicial en el borde derecho
-	
-	method chocoCharlie(){
-		
-	}
-	
-	method image() = "aro.png"
-	
-	
-	method moverse(){
-		if(position.x() > 0){ /*Creo esta condicion para simular un efecto circular de la creación de mi aro*/
-			game.removeVisual(self) // Elimina el aro de su posición anterior
-        	position = position.left(1) // Actualiza la posición del aro
-        	game.addVisual(self) // Agrega el aro en su nueva posición
-		}else{
-			game.removeVisual(self)
-			position =  game.at(game.width() - 1, position.y())
-			game.addVisual(self)
+	method generAutoAmarillo() {
+		if(autoAmarillo != null){
+			game.removeVisual(autoAmarillo)
 		}
-		game.schedule(500, { self.moverse() }) // Vuelve a llamar a moverse después de 500ms
+		autoAmarillo = new AutoAmarillo()
+		game.addVisual(autoAmarillo)
+		autoAmarillo.movete()
+		self.generAutosAmarillos()
 	}
 	
+	method moverAutoAmarillo(){
+		game.onTick(100, "movete", {autoAmarillo.act()})
+	}
+	
+	
+	
+	
+
 }
 
-class Moneda {
-		
-	method chocoCharlie(){
-		
-	}
+
+object autoRojo {
 	
-	method image () = "moneda.png"
-	
-	method position()= game.at(3,3)
-	
-	
+	var property position = game.at(7,7)
+
+    method image() = "auto.png"
+
+    method act() {
+        position = position.up(1)
+        if (position.y() >= game.width()) { //Condicion para realizar una repeticion sobre la salida del auto
+              position = position.down(game.height() - 1)
+        }
+    }
+    
+        method moverIzquierda() {
+        position = position.left(2) // Movimiento más rápido a la izquierda
+        if (position.x() < 0) {
+            position = position.right(1)
+        }
+    }
+
+    method moverDerecha() {
+        position = position.right(2) // Movimiento más rápido a la derecha
+        if (position.x() >= game.width()) {
+            position = position.left(1)
+        }
+    }
+    
 }
+
+class AutoAmarillo {
+	
+	var property position = game.at(7,7)
+	
+	method image() = "autoamarillo.png"
+	
+	 method act() {
+        position = position.up(1)
+        if (position.y() >= game.width()) { //Condicion para realizar una repeticion sobre la salida del auto
+              position = position.down(game.height() - 1)
+        }
+    }
+	
+	method movete(){
+		const x = 0.randomUpTo(game.width()).truncate(0)
+    	const y = 0.randomUpTo(game.height()).truncate(0)
+    	position = game.at(x,y) 
+	}
+}
+
+object fondo {
+    
+    var property position = game.origin()
+
+    method image() = "fondo.png"
+
+    method act() {
+        position = position.up(1)
+        if (position.y() >= game.height()) {
+            position = position.down(game.height() - 1)
+        }
+    }
+}
+
+object camion {
+	
+	var property position = game.at(5,8)
+
+    method image() = "camion.png"
+
+    method act() {
+        position = position.up(1)
+        if (position.y() >= game.width()) { //Condicion para realizar una repeticion sobre la salida del auto
+              position = position.down(game.height() - 1)
+        }
+    }
+    
+}
+
+
+
