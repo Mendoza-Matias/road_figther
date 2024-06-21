@@ -6,7 +6,7 @@ program juegoPrincipal {
 	juego.iniciar()
 	game.cellSize(50)
 	game.title("road fighter")
-	game.boardGround("fondo.jpeg")
+	game.boardGround("carretera.jpeg")
 	game.start()	
 	
 }
