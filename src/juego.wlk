@@ -1,185 +1,150 @@
 import wollok.game.*
+import inicio.*
 
-object juego {
-
-    var property autosAmarillos = [] // Lista para almacenar múltiples autos amarillos
-	var autoAzul
+object iniciarJuego {
+	var property autosAmarillo = []
+	var property autosArcoiris = []
 	
-    method iniciar() {
-
-        game.addVisualCharacter(autoRojo)
-        game.addVisual(camion)
-
-        self.tamanio() // Tamaño del tablero
-
-        game.onTick(500, "movete", {
-            autoRojo.act()
-            camion.act()
-            self.actualizarAutosAmarillos() // Actualiza autos amarillos en cada tick
-        })
-
-        game.whenCollideDo(autoRojo, {
-            elemento => elemento.saluda()
-        })
-        
-        
-        game.whenCollideDo(autoRojo, {
-        	elemento => elemento.sumarPunto()
-        })
-
-        keyboard.left().onPressDo { autoRojo.moverIzquierda() }
-        keyboard.right().onPressDo { autoRojo.moverDerecha() }
-
-        self.generAutosAmarillos()
-        self.generarAutosAzules()
-    }
-
-    method tamanio() {
-        game.width(5)
-        game.height(12)
-    }
-
-    method generAutosAmarillos() {
-        game.schedule(5000, { self.generAutoAmarillo() })
-    }
-
-    method generAutoAmarillo() {
-        const nuevoAutoAmarillo = new AutoAmarillo()
-        game.addVisual(nuevoAutoAmarillo)
-        nuevoAutoAmarillo.movete()
-        autosAmarillos.add(nuevoAutoAmarillo)
-        self.generAutosAmarillos()
-    }
-
-    method actualizarAutosAmarillos() {
-        autosAmarillos = autosAmarillos.filter { auto =>
-            if (0.randomUpTo(10) < 2) { // Probabilidad de desaparecer
-                game.removeVisual(auto)
-                false
-            } else {
-                auto.act()
-                true
-            }
-        }
-    }
-	method generarAutosAzules() {
-	game.schedule(2000, {self.generarAutoAzul()})
+	method visualizarObjetos() {
+		game.addVisual(carretera)
+		game.addVisual(jugador)
+		game.addVisual(autoAmarillo)
+		game.addVisual(autoArcoiris)
+		game.addVisual(vidas)
+		game.addVisual(kilometros)
+		autoAmarillo.iniciar()
+		autoArcoiris.iniciar()
+		game.whenCollideDo(jugador, {e => e.quitarVida()})
+		kilometros.iniciar()
+		
+		keyboard.right().onPressDo { jugador.moverDerecha() }
+        keyboard.left().onPressDo { jugador.moverIzquierda() }
 	}
 	
-	method generarAutoAzul() {
-		autoAzul = new AutoAzul()
-		game.addVisual(autoAzul)
-		autoAzul.movete()
+	
+     
+
+}
+
+object kilometros {
+	
+	var kilometros = 0
+	
+	method text() = kilometros.toString() + " kms"
+	method textColor() = paleta.rojo()
+	method position() = game.at(13,6)
+	
+	method pasarKilometros() {
+		kilometros = kilometros+1
+	}
+	method iniciar(){
+		kilometros = 0
+		game.onTick(100,"kilometros",{self.pasarKilometros()})
+	}
+	method detener(){
+		game.removeTickEvent("kilometros")
 	}
 }
 
-object autoRojo {
+object paleta {
+	const property rojo = "FFFFFF"
+}
 
-    var property position = game.at(2,2)
+object vidas {
+	var property position = game.at(13,7)
+	var property image = "bateriaLLena.png"
 	
-	var puntos = 0
+/*	method image() {
+		if (jugador.vida() == 2) {return }
+		else if (jugador.vida() == 1) {return }
+		else {}
+	}
+*/	
+}
+
+object jugador {
+	var property vida = 3
+	var property position = game.at(7,1)
+	var property kmRecorridos = 0
 	
-    method image() = "auto.png"
+	method image() = "autitoRojo.png"
 	
-	method puntos() = puntos 
+	method centrar() {
+		position = game.center()
+	}
 	
-    method act() {
-        position = position.up(1)
-        if (position.y() >= game.height()) {
-            position = position.down(game.height())
-            position = position.right(1)
-        }
-        if (position.x() >= game.width()) {
-            position = game.at(0, position.y())
+	method quitarVida() {
+		if (self.position() == autoAmarillo.position()){
+			if(vida >= 1){
+				vida -= 1
+				if (vida == 0) {
+					game.schedule(50,{game.removeVisual(self)})
+					game.boardGround("end.png")
+				}
+			}
+		}
+	}
+	
+	method moverIzquierda() {
+        if (position.x() > 0) {
+            position = game.at(position.x() - 1, position.y())
         }
     }
-
-    method moverIzquierda() {
-        position = position.left(1) // Movimiento más rápido a la izquierda
-        if (position.x() < 0) {
-            position = position.right(1)
-        }
-        
-    }
-
-    method moverDerecha() {
-        position = position.right(1) // Movimiento más rápido a la derecha
-        if (position.x() >= game.width()) {
-            position = position.left(1)
+	
+	method moverDerecha() {
+        if (position.x() < game.width() - 1) {
+            position = game.at(position.x() + 1, position.y())
         }
     }
     
-    method sumarPuntos(){
-    	puntos += 1
-    	game.say(self, "punto")
-    }
     
 }
 
-//El auto azul suma puntos en el auto rojo
-class AutoAzul{
+object autoAmarillo {
+	var position = self.posicionInicial()
 	
-	var property position = game.at(2,2)
+	method image() = "autitoAmarillo.png"
+	method position() = position
+
+	method posicionInicial() = game.at(game.height()-1,10)
 	
-	method image () = "autoAzul.png"
+	method iniciar(){
+		position = self.posicionInicial()
+		game.onTick(200,"moverAuto",{self.mover()})
+	}
 	
-	method act() {
-        position = position.up(1)
-        if (position.y() >= game.height()) {
-            position = position.down(game.height())
-            position = position.right(1)
-        }
-        if (position.x() >= game.width()) {
-            position = game.at(0, position.y())
-        }
-    }
-    
-     method movete() {
-        const x = 0.randomUpTo(game.width()).truncate(0)
-        const y = 0.randomUpTo(game.height()).truncate(0)
-        position = game.at(x, y)
-    } 
-    
-      method sumarPunto(){
-   		autoRojo.sumarPunto()
-   }
+	method mover(){
+		position = position.down(1)
+		if (position.y() == game.height())
+			position = self.posicionInicial()
+	}
+
 }
 
-class AutoAmarillo {
-
-    var property position = game.at(1,1)
-    var property mensaje = "choco"
-
-    method image() = "autoamarillo.png"
-
-    method act() {
-        position = position.up(1)
-        if (position.y() >= game.height()) {
-            position = position.down(game.height() - 1)
-        }
-    }
-
-    method movete() {
-        const x = 0.randomUpTo(game.width()).truncate(0)
-        const y = 0.randomUpTo(game.height()).truncate(0)
-        position = game.at(x, y)
-    }
-
-    method saluda() {
-        game.say(self, mensaje)
-    }
+object carretera {
+	method position() = game.at(4,0)
+	
+	method image() = "carretera.png"
 }
 
-object camion {
 
-    var property position = game.at(5, 8)
+object autoArcoiris {
+	var position = self.posicionInicial()
+	
+	method image() = "autitoArcoiris.png"
+	method position() = position
 
-    method image() = "camion.png"
-
-    method act() {
-        position = position.up(1)
-        if (position.y() >= game.height()) {
-            position = position.down(game.height() - 1)
-        }
-    }
+	method posicionInicial() = game.at(game.height()-3,10)
+	
+	method iniciar(){
+		position = self.posicionInicial()
+		game.onTick(250,"moverAuto",{self.mover()})
+	}
+	
+	method mover(){
+		position = position.down(1)
+		if (position.y() == game.height())
+			position = self.posicionInicial()
+	}
+ 	
 }
