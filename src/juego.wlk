@@ -12,18 +12,19 @@ object iniciarJuego {
 		game.addVisual(autoArcoiris)
 		game.addVisual(vidas)
 		game.addVisual(kilometros)
-		autoAmarillo.iniciar()
-		autoArcoiris.iniciar()
-		game.whenCollideDo(jugador, {e => e.quitarVida()})
+	
+		game.onTick(50, "iniciar", {
+			autoAmarillo.mover()
+			autoArcoiris.iniciar()
+		})
+		
+		game.whenCollideDo(jugador, {e => e.chocaAlAutoRojo()})
 		kilometros.iniciar()
 		
 		keyboard.right().onPressDo { jugador.moverDerecha() }
         keyboard.left().onPressDo { jugador.moverIzquierda() }
 	}
 	
-	
-     
-
 }
 
 object kilometros {
@@ -34,8 +35,12 @@ object kilometros {
 	method textColor() = paleta.rojo()
 	method position() = game.at(13,6)
 	
+	method aumentarKilometros(valor){
+		kilometros += valor
+	}
+	
 	method pasarKilometros() {
-		kilometros = kilometros+1
+		kilometros = kilometros + 1
 	}
 	method iniciar(){
 		kilometros = 0
@@ -63,7 +68,7 @@ object vidas {
 }
 
 object jugador {
-	var property vida = 3
+	var vida = 3
 	var property position = game.at(7,1)
 	var property kmRecorridos = 0
 	
@@ -71,6 +76,12 @@ object jugador {
 	
 	method centrar() {
 		position = game.center()
+	}
+	
+	method vida() = vida
+	
+	method sumarUnaVida(){
+		vida = vida + 1
 	}
 	
 	method quitarVida() {
@@ -83,6 +94,11 @@ object jugador {
 				}
 			}
 		}
+		self.mensaje()
+	}
+	
+	method mensaje(){
+		game.say(self, self.vida().toString())
 	}
 	
 	method moverIzquierda() {
@@ -101,22 +117,49 @@ object jugador {
 }
 
 object autoAmarillo {
-	var position = self.posicionInicial()
 	
+	const property largo = [0,2,4,3,5,1,6]
+	var posicion = 0
+	var position = self.posicionInicial()
 	method image() = "autitoAmarillo.png"
 	method position() = position
-
-	method posicionInicial() = game.at(game.height()-1,10)
+	
+	method largo () = largo
+		
+	method posicionInicial() = game.at(game.height()-largo.get(posicion),10)
 	
 	method iniciar(){
-		position = self.posicionInicial()
-		game.onTick(200,"moverAuto",{self.mover()})
+		self.mover()
+	}
+	
+	method posicion () = posicion
+	
+	method reiniciarPosicion(){
+		posicion = posicion - 1
+	}
+	
+	method sumarUnaPosicion(){
+		posicion += 1
 	}
 	
 	method mover(){
+		if(position.y() == 0){
+			position = self.posicionInicial()
+		}
+		if(self.posicion() == 6){
+			self.reiniciarPosicion()
+		}
+		if(self.posicion() == 0){
+			self.sumarUnaPosicion()
+		}
+		self.sumarUnaPosicion()
 		position = position.down(1)
 		if (position.y() == game.height())
 			position = self.posicionInicial()
+	}
+	
+	method chocaAlAutoRojo(){
+		jugador.quitarVida()
 	}
 
 }
@@ -129,22 +172,49 @@ object carretera {
 
 
 object autoArcoiris {
-	var position = self.posicionInicial()
 	
+	const property largo = [6,5,4,3,2,1,0]
+	var posicion = 0
+	var position = self.posicionInicial()
 	method image() = "autitoArcoiris.png"
 	method position() = position
-
-	method posicionInicial() = game.at(game.height()-3,10)
+	
+	method largo () = largo
+		
+	method posicionInicial() = game.at(game.height()-largo.get(posicion),10)
 	
 	method iniciar(){
-		position = self.posicionInicial()
-		game.onTick(250,"moverAuto",{self.mover()})
+		self.mover()
+	}
+	
+	method posicion () = posicion
+	
+	method reiniciarPosicion(){
+		posicion = 0
+	}
+	
+	method sumarUnaPosicion(){
+		posicion += 1
 	}
 	
 	method mover(){
+		if(position.y() == 0){
+			position = self.posicionInicial()
+		}
+		if(self.posicion() == 6){
+			self.reiniciarPosicion()
+		}
+		self.sumarUnaPosicion()
 		position = position.down(1)
 		if (position.y() == game.height())
 			position = self.posicionInicial()
 	}
  	
+ 	method chocaAlAutoRojo(){
+		kilometros.aumentarKilometros(100)
+		if(jugador.vida()!= 3){
+			jugador.sumarUnaVida()
+			jugador.mensaje()
+		}
+	}	
 }
