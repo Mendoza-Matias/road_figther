@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
-Automatic-Module-Name: RoadFighter
+Automatic-Module-Name: road_figther
 Bundle-ManifestVersion: 2
-Bundle-Name: RoadFighter
+Bundle-Name: road_figther
 Bundle-Vendor: My Company
 Bundle-Version: 1.0.0.qualifier
-Bundle-SymbolicName: RoadFighter; singleton:=true
+Bundle-SymbolicName: road_figther; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: com.ibm.icu,
  org.eclipse.xtext,
