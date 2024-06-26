@@ -1,16 +1,23 @@
-import enemigo.* /*clase enemigo */
-import wollok.game.* /*importo wollok game*/
 import configuracion.*
+import wollok.game.*
 import visuales.*
+import niveles.*
 
 object juego {
-	/*metodo para iniciar el juego */
-	method iniciar(){ 
+	
+	method iniciar() {
 		configuracion.pantallaConfig()
-		imagenInicio.mostrar() /*llamo al objeto del archivo visuales el cual inserta mi imagen de inicio*/
+		imagenInicio.mostrar()
+		game.schedule(5000, {gestorDeNiveles.nivelActual().iniciar()})
 		game.start()
 	}
+	
+	method ganar(){
+		game.clear()
+	}
+	
+	method perder(){
+		
+	}
+	
 }
-
-
-

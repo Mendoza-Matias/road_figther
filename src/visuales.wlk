@@ -10,4 +10,4 @@ class Visual {
 }
 
 	const imagenInicio = new Visual(image = "presentacion.png") /*creo un objeto de tipo visual para setear la pantalla de inicio*/
-	
+	const carretera = new Visual(image = "carretera.png")
