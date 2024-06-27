@@ -7,7 +7,8 @@ class Visual {
 	method position() = game.at(0,0)
 	
 	method mostrar(){game.addVisual(self)}
-}
+	
+	}
 
 	const imagenInicio = new Visual(image = "presentacion.png") /*creo un objeto de tipo visual para setear la pantalla de inicio*/
-	const carretera = new Visual(image = "carretera.png")
+	const nivel1 = new Visual(image = "uno.png")

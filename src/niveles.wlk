@@ -10,7 +10,7 @@ import personajes.*
 object gestorDeNiveles {
 	
 	var property nivelActualNumero = 1
-	var property nivelActual = nivel1
+	var property nivelActual = nivel2
 	var property vidas = 3
 	
 	method ultimoNivel() = self.nivelActual().siguienteNivel ()== null
@@ -42,6 +42,7 @@ object gestorDeNiveles {
 		nivelActualNumero = 1
 		
 		nivelActual.iniciar()
+		
 	}
 }
 
@@ -52,6 +53,7 @@ class Nivel {
 	var property combustible = []
 	var property siguienteNivel = null
 	var property posInicialJugador
+	var property fondo
 	
 	
 	method iniciar(){
@@ -60,17 +62,16 @@ class Nivel {
 	
 	method cargarEscenario() {
 		game.clear()
-		configuracion.agregarPersonajes()
-		carretera.mostrar() /*muestra la carretera*/
-		self.crearObjetos()
+		self.crearCarretera(fondo)
+		configuracion.agregarPersonajes(posInicialJugador)
 		self.crearTodos(enemigos)
 		self.crearTodos(combustible)
 	}
 	
-	method crearObjetos(){
-		jugador.crear()
-		jugador.position(posInicialJugador)
+	method crearCarretera(fondoActual){
+		fondoActual.crear()
 	}
+	
 	
 	method crearTodos(listaDeObjetos){
 		listaDeObjetos.forEach({objeto => objeto.crear()})

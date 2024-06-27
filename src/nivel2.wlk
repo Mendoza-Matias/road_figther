@@ -3,6 +3,9 @@ import wollok.game.*
 import personajes.*
 
 const nivel2 = new Nivel(
+		
+	fondo = new Fondo(image="carretera.png"), /*agrego la imagen de la carretera*/
+	
 	enemigos = [
 		new Enemigo(position = game.at(5,2)),
 		new Enemigo(position = game.at(7,3)),
@@ -17,4 +20,6 @@ const nivel2 = new Nivel(
 	]
 	,
 	siguienteNivel = nivel2
-	, posInicialJugador = game.at(6,0))
+	, 
+	posInicialJugador = game.at(6,0)
+	)
