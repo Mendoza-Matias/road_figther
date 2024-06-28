@@ -2,20 +2,25 @@ import wollok.game.*
 
 /*clases que representaran mis objetos en el juego*/
 
+/*clases que representaran mis objetos en el juego*/
+
 class Vehiculo {
-	
-	var property position = null
-	
 	/*metodo encargado de cargar la visual*/
-	method crear(){game.addVisualCharacter(self)} 
-	
-	/*metodo encargado de cargar la visual*/
-	method mover(){}
+	method crear(){game.addVisual(self)} 
 }
 
 /*creo una clase que sea para los objetos que son movibles*/
 class ObjetoMovible inherits Vehiculo {
+	
+	var property position = null
+	
 	method moverA(dir)
+	
+	method noSaleDeLaCarretera(posicion)
+	
+	method proximaPosicion(dir) = dir.siguientePosicion(position) /*evalua la proxima posicion , recibe un objeto te tipo direccion*/
+	
+	method puedeMoverseA(posicion) = self.noSaleDeLaCarretera(posicion) /*condicion para saber si es posible el movimiento*/
 }
 
 
@@ -34,22 +39,49 @@ object jugador inherits ObjetoMovible {
 		}
 	}
 	
-	method proximaPosicion(dir) = dir.proximaPosicion(dir) /*evalua la prixma posicion*/
-	
-	method puedeMoverseA(posicion) = self.noSaleDeLaCarretera(posicion) /*condicion para saber si es posible el movimiento*/
-	
-	method noSaleDeLaCarretera(posicion) =  posicion.x() > 3 and posicion.x() < 9 /*condicion de limite*/
-	
-	
+	override method noSaleDeLaCarretera(posicion) =  posicion.x() > 2 and posicion.x() < 10 /*condicion de limite*/
 	
 }
 
-class Enemigo inherits Vehiculo {
+class Enemigo inherits ObjetoMovible {
 	var property image = "enemigo.png"
+	
+	method moverAutomaticamente(dir){
+		game.onTick(5000, "mover automaticamente", {
+			self.moverA(dir)
+		})
+	}
+	
+   override method moverA(dir) {
+        const proximaPosicion = self.proximaPosicion(dir)
+        if (self.puedeMoverseA(proximaPosicion)) {
+            position = proximaPosicion
+        }else{
+        	position = game.at(position.x(), 11)
+        }
+    }
+    override method noSaleDeLaCarretera(posicion) = posicion.y() > - 2
 }
 
-class Combustible inherits Vehiculo {
+class Combustible inherits ObjetoMovible {
+	
 	var property image = "combustible.png"
+	
+	method moverAutomaticamente(dir){
+		game.onTick(5000, "mover automaticamente", {
+			self.moverA(dir)
+		})
+	}
+	
+   override method moverA(dir) {
+        const proximaPosicion = self.proximaPosicion(dir)
+        if (self.puedeMoverseA(proximaPosicion)) {
+            position = proximaPosicion
+        }else{
+        	position = game.at(position.x(), 11)
+        }
+    }
+    override method noSaleDeLaCarretera(posicion) = posicion.y() > - 2
 }
 
 /*clase para crear instancias de fondos distintos*/

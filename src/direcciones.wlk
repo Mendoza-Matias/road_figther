@@ -5,3 +5,7 @@ object derecha {
 object izquierda{
 	method siguientePosicion(pos) = pos.left(1)
 }
+
+object abajo{
+	method siguientePosicion(pos) = pos.down(1)
+}

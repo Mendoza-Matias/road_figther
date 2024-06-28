@@ -5,12 +5,13 @@ import juego.*
 import configuracion.*
 import visuales.*
 import personajes.*
+import direcciones.*
 
 /*manejar los niveles del juego*/
 object gestorDeNiveles {
 	
 	var property nivelActualNumero = 1
-	var property nivelActual = nivel2
+	var property nivelActual = nivel1
 	var property vidas = 3
 	
 	method ultimoNivel() = self.nivelActual().siguienteNivel ()== null
@@ -66,6 +67,8 @@ class Nivel {
 		configuracion.agregarPersonajes(posInicialJugador)
 		self.crearTodos(enemigos)
 		self.crearTodos(combustible)
+		game.onTick(500,"mover autos", {self.moverAutos(enemigos)}) /*cuando se carga el nivel los autos se moveran*/
+		game.onTick(500,"mover autos", {self.moverAutos(combustible)})
 	}
 	
 	method crearCarretera(fondoActual){
@@ -75,6 +78,11 @@ class Nivel {
 	
 	method crearTodos(listaDeObjetos){
 		listaDeObjetos.forEach({objeto => objeto.crear()})
+	}
+	
+	method moverAutos(listaDeObjetos){
+		/*recorre la lista de enemigos y los hace moverse*/
+		listaDeObjetos.forEach({objeto => objeto.moverAutomaticamente(abajo)})
 	}
 	
 	
