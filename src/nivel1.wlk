@@ -23,3 +23,4 @@ const nivel1 = new Nivel(
 	posInicialJugador = game.at(5,1)
 )
 
+

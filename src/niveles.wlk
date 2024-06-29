@@ -75,7 +75,6 @@ class Nivel {
 		fondoActual.crear()
 	}
 	
-	
 	method crearTodos(listaDeObjetos){
 		listaDeObjetos.forEach({objeto => objeto.crear()})
 	}
@@ -84,7 +83,6 @@ class Nivel {
 		/*recorre la lista de enemigos y los hace moverse*/
 		listaDeObjetos.forEach({objeto => objeto.moverAutomaticamente(abajo)})
 	}
-	
 	
 	
 }

@@ -60,7 +60,7 @@ class Enemigo inherits ObjetoMovible {
         	position = game.at(position.x(), 11)
         }
     }
-    override method noSaleDeLaCarretera(posicion) = posicion.y() > - 2
+   override method noSaleDeLaCarretera(posicion) = posicion.y() > - 2
 }
 
 class Combustible inherits ObjetoMovible {

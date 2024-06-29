@@ -5,13 +5,15 @@ import niveles.*
 
 object juego {
 	
+	const iniciado = estadoDelJuego
+	
 	method iniciar() {
 		configuracion.pantallaConfig()
 		imagenInicio.mostrar()
 		// game.schedule(5000,{nivel1.mostrar()})
-		game.schedule(5000, {
-			gestorDeNiveles.nivelActual().iniciar()
-		})
+		keyboard.enter().onPressDo{
+			configuracion.cargaYInicioDelJuego(iniciado)
+		}
 		game.start()
 	}
 	
@@ -25,4 +27,8 @@ object juego {
 		
 	}
 	
+}
+ /*Objeto que se encarga de manejar el estado de mi juego*/
+object estadoDelJuego{
+	var property estaIniciado = false
 }
