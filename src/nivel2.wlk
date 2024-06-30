@@ -22,4 +22,4 @@ const nivel2 = new Nivel(
 	siguienteNivel = nivel2
 	, 
 	posInicialJugador = game.at(6,0)
-	)
+)

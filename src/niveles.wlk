@@ -24,6 +24,13 @@ object gestorDeNiveles {
 		}
 	}	
 	
+	method agregarPuntos(puntosGanados) { // gestor de puntos, si llega a 100 puntos cambia de nivel
+        estadoDelJuego.puntos() == estadoDelJuego.puntos() + puntosGanados
+        if (estadoDelJuego.puntos() >= 100) {
+            self.cargarSiguienteNiVel()
+        }
+    }
+	
 	method cargarSiguienteNiVel(){
 		if(!self.ultimoNivel()){
 			nivelActual = nivelActual.siguienteNivel()
@@ -83,6 +90,10 @@ class Nivel {
 		/*recorre la lista de enemigos y los hace moverse*/
 		listaDeObjetos.forEach({objeto => objeto.moverAutomaticamente(abajo)})
 	}
+	
+	method incrementarPuntos(puntos) { // agregaria puntos cuando se interactue con los enemigos
+        gestorDeNiveles.agregarPuntos(puntos)
+    }
 	
 	
 }

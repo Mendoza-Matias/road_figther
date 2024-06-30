@@ -15,3 +15,4 @@ class Visual {
 
 	const imagenInicio = new Visual(image = "presentacion.png") /*creo un objeto de tipo visual para setear la pantalla de inicio*/
 	const nivel1 = new Visual(image = "uno.png")
+	const imagenGameOver = new Visual(image = "perdido.png")

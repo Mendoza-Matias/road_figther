@@ -1,4 +1,7 @@
 import wollok.game.*
+import niveles.*
+import configuracion.*
+import visuales.*
 
 /*clases que representaran mis objetos en el juego*/
 
@@ -36,11 +39,28 @@ object jugador inherits ObjetoMovible {
 		const proximaPosicion = self.proximaPosicion(dir) 
 		if(self.puedeMoverseA(proximaPosicion)){
 			position = proximaPosicion
+			self.verificarInteracciones() // verifica si el jugador ha interactuado con el combustible o enemigo y agregaria puntos en consecuencia
 		}
 	}
 	
 	override method noSaleDeLaCarretera(posicion) =  posicion.x() > 2 and posicion.x() < 10 /*condicion de limite*/
 	
+	method verificarInteracciones() {
+        enemigos.forEach({enemigo => 
+            if (self.position() == enemigo.position()) {
+                // Lógica de colisión con enemigo
+                gestorDeNiveles.perderVida()
+            }
+        })
+        
+        combustible.forEach({item =>
+            if (self.position() == item.position()) {
+                // Lógica de recoger combustible
+                item.remover()
+                gestorDeNiveles.agregarPuntos(10) // Añade puntos por recoger combustible
+            }
+        })
+    }
 }
 
 class Enemigo inherits ObjetoMovible {
