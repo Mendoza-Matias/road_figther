@@ -50,13 +50,14 @@ object gestorDeNiveles {
 
 class Nivel {
 	
+	/*atributos de mi clase */
 	var property enemigos = [] 
 	var property combustible = []
 	var property siguienteNivel = null
 	var property posInicialJugador
 	var property fondo
 	
-	
+	/*encargado de iniciar el juego - es llamado en el archivo juego.wlk */
 	method iniciar(){
 		self.cargarEscenario()
 	}
@@ -70,6 +71,8 @@ class Nivel {
 		game.onTick(500,"mover autos", {self.moverAutos(enemigos)}) /*cuando se carga el nivel los autos se moveran*/
 		game.onTick(500,"mover autos", {self.moverAutos(combustible)})
 	}
+	
+	/*metodos encargados de la logica del escenario y los objetos involucrados*/
 	
 	method crearCarretera(fondoActual){
 		fondoActual.crear()
