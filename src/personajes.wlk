@@ -10,6 +10,8 @@ import visuales.*
 class Vehiculo {
 	/*metodo encargado de cargar la visual*/
 	method crear(){game.addVisual(self)} 
+	
+	method remover(){game.removeVisual(self)}
 }
 
 /*creo una clase que sea para los objetos que son movibles*/
@@ -26,12 +28,24 @@ class ObjetoMovible inherits Vehiculo {
 	method puedeMoverseA(posicion) = self.noSaleDeLaCarretera(posicion) /*condicion para saber si es posible el movimiento*/
 }
 
-
 /*se crea directamente un objeto ya que va a haber un unico jugador*/
 
 object jugador inherits ObjetoMovible {
-
+	
+	var vidas = 3
+	var puntos = 0
 	var property image = "jugador.png"
+	
+	
+	/*metodos de vidas y puntos*/
+	method vidas()= vidas
+	
+	method cantidadDeVidas() = game.say(self, "vidas" + self.vidas().toString())
+	method cantidadDePuntos() = game.say(self, "puntos" + self.puntos().toString())
+	
+	method restarVida(){ vidas = 0.max(vidas - 1)}
+	method puntos()=puntos
+	method sumarPunto(){puntos = puntos + 1}
 	
 	/*metodo que me permite moverme*/
 	
@@ -39,28 +53,11 @@ object jugador inherits ObjetoMovible {
 		const proximaPosicion = self.proximaPosicion(dir) 
 		if(self.puedeMoverseA(proximaPosicion)){
 			position = proximaPosicion
-			self.verificarInteracciones() // verifica si el jugador ha interactuado con el combustible o enemigo y agregaria puntos en consecuencia
 		}
 	}
 	
 	override method noSaleDeLaCarretera(posicion) =  posicion.x() > 2 and posicion.x() < 10 /*condicion de limite*/
 	
-	method verificarInteracciones() {
-        enemigos.forEach({enemigo => 
-            if (self.position() == enemigo.position()) {
-                // Lógica de colisión con enemigo
-                gestorDeNiveles.perderVida()
-            }
-        })
-        
-        combustible.forEach({item =>
-            if (self.position() == item.position()) {
-                // Lógica de recoger combustible
-                item.remover()
-                gestorDeNiveles.agregarPuntos(10) // Añade puntos por recoger combustible
-            }
-        })
-    }
 }
 
 class Enemigo inherits ObjetoMovible {
@@ -80,7 +77,14 @@ class Enemigo inherits ObjetoMovible {
         	position = game.at(position.x(), 11)
         }
     }
+    
    override method noSaleDeLaCarretera(posicion) = posicion.y() > - 2
+
+	method choco(){/*Metodo encargado de quitar puntos del jugador*/
+		jugador.restarVida()
+		self.remover()
+		jugador.cantidadDeVidas()
+	}
 }
 
 class Combustible inherits ObjetoMovible {
@@ -102,6 +106,12 @@ class Combustible inherits ObjetoMovible {
         }
     }
     override method noSaleDeLaCarretera(posicion) = posicion.y() > - 2
+    
+    method choco(){
+		jugador.sumarPunto()
+		self.remover()
+		jugador.cantidadDePuntos()
+	}
 }
 
 /*clase para crear instancias de fondos distintos*/

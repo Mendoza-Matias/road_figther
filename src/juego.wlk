@@ -10,7 +10,6 @@ object juego {
 	method iniciar() {
 		configuracion.pantallaConfig()
 		imagenInicio.mostrar()
-		// game.schedule(5000,{nivel1.mostrar()})
 		keyboard.enter().onPressDo{
 			configuracion.cargaYInicioDelJuego(iniciado)
 		}
@@ -36,5 +35,4 @@ object juego {
  /*Objeto que se encarga de manejar el estado de mi juego*/
 object estadoDelJuego{
 	var property estaIniciado = false
-	var property puntos = 0 // Inicializo los puntos en 0
 }

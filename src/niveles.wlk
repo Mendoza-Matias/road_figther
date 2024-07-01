@@ -10,9 +10,12 @@ import direcciones.*
 /*manejar los niveles del juego*/
 object gestorDeNiveles {
 	
+	var autoRojo = jugador /*variable en objeto el cual puedo usar en cualquier lugar de mi juego*/	
 	var property nivelActualNumero = 1
 	var property nivelActual = nivel1
 	var property vidas = 3
+		
+	method autoRojo() = autoRojo
 	
 	method ultimoNivel() = self.nivelActual().siguienteNivel ()== null
 	
@@ -24,9 +27,8 @@ object gestorDeNiveles {
 		}
 	}	
 	
-	method agregarPuntos(puntosGanados) { // gestor de puntos, si llega a 100 puntos cambia de nivel
-        estadoDelJuego.puntos() == estadoDelJuego.puntos() + puntosGanados
-        if (estadoDelJuego.puntos() >= 100) {
+	method cambiarNivelPorPuntos() { // gestor de puntos, si llega a 100 puntos cambia de nivel
+        if (autoRojo.puntos() >= 100) {
             self.cargarSiguienteNiVel()
         }
     }
@@ -45,15 +47,21 @@ object gestorDeNiveles {
 	}
 	
 	method volverAEmpezar(){
+
 		vidas = 3
 		nivelActual = nivel1
 		nivelActualNumero = 1
 		
 		nivelActual.iniciar()
-		
 	}
-}
+	
+	method verificarColision(){ /*verifica si el auto rojo choco ya sea a un Enemigo y a un Combustible*/
+		game.whenCollideDo(self.autoRojo(),{auto =>
+			auto.choco()
+		})
+	}
 
+}
 
 class Nivel {
 	
@@ -72,7 +80,7 @@ class Nivel {
 	method cargarEscenario() {
 		game.clear()
 		self.crearCarretera(fondo)
-		configuracion.agregarPersonajes(posInicialJugador)
+		configuracion.agregarPersonajes(gestorDeNiveles.autoRojo(),posInicialJugador)
 		self.crearTodos(enemigos)
 		self.crearTodos(combustible)
 		game.onTick(500,"mover autos", {self.moverAutos(enemigos)}) /*cuando se carga el nivel los autos se moveran*/
@@ -93,10 +101,5 @@ class Nivel {
 		/*recorre la lista de enemigos y los hace moverse*/
 		listaDeObjetos.forEach({objeto => objeto.moverAutomaticamente(abajo)})
 	}
-	
-	method incrementarPuntos(puntos) { // agregaria puntos cuando se interactue con los enemigos
-        gestorDeNiveles.agregarPuntos(puntos)
-    }
-	
 	
 }

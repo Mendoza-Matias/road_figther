@@ -25,15 +25,16 @@ object configuracion {
 				nivel1.mostrar() //Muestra la imagen del nivel actual y pasa al juego
 				game.onTick(2000, "cargar nivel", { //Le añado un pequeño corto para que de margen y de esa manera insertar la img del nivel
 					gestorDeNiveles.nivelActual().iniciar()
+					gestorDeNiveles.verificarColision()
 				})
 				estadoDelJuego.estaIniciado(true)
 			}
 	}
 	
 	/*agrego al objeto juego en el escenario*/
-	method agregarPersonajes(posicion) {
-		jugador.crear()
-		jugador.position(posicion)
+	method agregarPersonajes(personaje,posicion) {
+		personaje.crear()
+		personaje.position(posicion)
 		self.configurarTeclas()
 	}
 	
