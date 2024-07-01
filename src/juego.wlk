@@ -23,12 +23,7 @@ object juego {
 	
 	/*metodo que me dice que game over , agrega la pantalla*/
 	method perder(){
-		game.clear()
-        imagenGameOver.mostrar()
-        keyboard.enter().onPressDo {
-            gestorDeNiveles.volverAEmpezar()
-            imagenGameOver.remover()
-        }
+		
 	}
 	
 }

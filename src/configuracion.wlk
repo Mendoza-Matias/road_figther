@@ -27,6 +27,7 @@ object configuracion {
 					gestorDeNiveles.nivelActual().iniciar()
 					gestorDeNiveles.verificarColision()
 				})
+				
 				estadoDelJuego.estaIniciado(true)
 			}
 	}
@@ -43,6 +44,7 @@ object configuracion {
 		keyboard.a().onPressDo({jugador.moverA(izquierda)})
 		keyboard.d().onPressDo({jugador.moverA(derecha)})
 	}
+	
 	
 
 }

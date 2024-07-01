@@ -10,50 +10,26 @@ import direcciones.*
 /*manejar los niveles del juego*/
 object gestorDeNiveles {
 	
-	var autoRojo = jugador /*variable en objeto el cual puedo usar en cualquier lugar de mi juego*/	
+	const autoRojo = jugador /*variable en objeto el cual puedo usar en cualquier lugar de mi juego*/	
 	var property nivelActualNumero = 1
-	var property nivelActual = nivel1
+	var nivelActual = nivel1
 	var property vidas = 3
 		
+		
+	method nivelActual()= nivelActual
+	
+	method cambiarDeNivel(nuevoNivel){
+		nivelActual = nuevoNivel
+	}	
+	
 	method autoRojo() = autoRojo
 	
 	method ultimoNivel() = self.nivelActual().siguienteNivel ()== null
 	
-	method perderVida(){
-		if (vidas == 0) juego.perder() /*si me quedo sin vidas pierdo el juego*/
-		else{
-			vidas -= 1
-			nivelActual.iniciar()
-		}
-	}	
-	
-	method cambiarNivelPorPuntos() { // gestor de puntos, si llega a 100 puntos cambia de nivel
-        if (autoRojo.puntos() >= 100) {
-            self.cargarSiguienteNiVel()
-        }
+	method cambiarDeNivel() { /*metodo encargado de cambiar de nivel */
+			
     }
 	
-	method cargarSiguienteNiVel(){
-		if(!self.ultimoNivel()){
-			nivelActual = nivelActual.siguienteNivel()
-			nivelActualNumero++
-			vidas = 3
-			
-			nivelActual.iniciar()
-		}
-		else{
-			juego.ganar()
-		}
-	}
-	
-	method volverAEmpezar(){
-
-		vidas = 3
-		nivelActual = nivel1
-		nivelActualNumero = 1
-		
-		nivelActual.iniciar()
-	}
 	
 	method verificarColision(){ /*verifica si el auto rojo choco ya sea a un Enemigo y a un Combustible*/
 		game.whenCollideDo(self.autoRojo(),{auto =>
@@ -70,7 +46,7 @@ class Nivel {
 	var property combustible = []
 	var property siguienteNivel = null
 	var property posInicialJugador
-	var property fondo
+	var property fondo /*fondo de carretera*/
 	
 	/*encargado de iniciar el juego - es llamado en el archivo juego.wlk */
 	method iniciar(){
