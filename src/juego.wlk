@@ -11,7 +11,7 @@ object juego {
 		configuracion.pantallaConfig()
 		imagenInicio.mostrar()
 		keyboard.enter().onPressDo{
-			configuracion.cargaYInicioDelJuego(iniciado)
+			configuracion.cargaYInicioDelJuego(visualNivel1,iniciado,gestorDeNiveles.nivelActual())
 		}
 		game.start()
 	}
@@ -29,5 +29,11 @@ object juego {
 }
  /*Objeto que se encarga de manejar el estado de mi juego*/
 object estadoDelJuego{
-	var property estaIniciado = false
+	var estaIniciado = false
+	
+	method estaIniciado() = estaIniciado
+	
+	method cambiarValor(nuevoValor){
+		estaIniciado = nuevoValor
+	}
 }

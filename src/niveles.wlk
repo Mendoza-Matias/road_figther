@@ -14,7 +14,14 @@ object gestorDeNiveles {
 	var property nivelActualNumero = 1
 	var nivelActual = nivel1
 	var property vidas = 3
-		
+	var cambioDeNivel = false
+	
+	method cambioDeNivel () = cambioDeNivel	
+	
+	method siCambioDeNivel (){
+		cambioDeNivel = true
+	}
+	
 		
 	method nivelActual()= nivelActual
 	
@@ -24,10 +31,34 @@ object gestorDeNiveles {
 	
 	method autoRojo() = autoRojo
 	
-	method ultimoNivel() = self.nivelActual().siguienteNivel ()== null
+	method ultimoNivel() = self.nivelActual().siguienteNivel () == null
 	
-	method cambiarDeNivel() { /*metodo encargado de cambiar de nivel */
-			
+	  method cambiarDeNivel() {
+	  	/*condicion que delimita mi cambio */
+	  	if(self.autoRojo().puntos() == 2 and not self.ultimoNivel()){
+            game.clear() 
+            estadoDelJuego.cambiarValor(false)
+            self.autoRojo().reiniciarPuntos() //reinicio los puntos para evitar que se genere un bucle en el llamado
+            self.autoRojo().reiniciarVidas() //reinicio las vidas para evitar que se genere un bucle en el llamado
+            self.cambiarDeNivel(nivel2)
+            configuracion.cargaYInicioDelJuego(visualNivel2,estadoDelJuego,nivel2)
+    	}
+    	else if(self.autoRojo().vidas() == 0)
+    	{	
+    		game.clear() 
+    		estadoDelJuego.cambiarValor(false)
+    		configuracion.cargaYInicioDelJuego( imagenGameOver,estadoDelJuego,null)
+    		keyboard.enter().onPressDo{
+    			juego.iniciar()
+    		}
+    		
+    	}
+    	/*{
+    		game.clear() 
+    		estadoDelJuego.cambiarValor(false)
+    		configuracion.cargaYInicioDelJuego( imagenGameOver,estadoDelJuego,null)
+    	}*/
+    	
     }
 	
 	
@@ -36,6 +67,10 @@ object gestorDeNiveles {
 			auto.choco()
 		})
 	}
+	
+	  method actualizar() { /*Nuevo método para actualizar el estado del juego*/
+        self.cambiarDeNivel()
+    }
 
 }
 
@@ -50,7 +85,9 @@ class Nivel {
 	
 	/*encargado de iniciar el juego - es llamado en el archivo juego.wlk */
 	method iniciar(){
-		self.cargarEscenario()
+		 self.cargarEscenario()
+		 gestorDeNiveles.verificarColision()
+	     game.onTick(1000, "cambiar nivel", {gestorDeNiveles.actualizar()})
 	}
 	
 	method cargarEscenario() {

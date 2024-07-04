@@ -36,15 +36,25 @@ object jugador inherits ObjetoMovible {
 	var puntos = 0
 	var property image = "jugador.png"
 	
+	method reiniciarVidas (){
+		vidas = 3
+	}
+	
+	method reiniciarPuntos(){
+		puntos = 0
+	}
 	
 	/*metodos de vidas y puntos*/
-	method vidas()= vidas
+	method vidas() = vidas
 	
-	method cantidadDeVidas() = game.say(self, "vidas" + self.vidas().toString())
-	method cantidadDePuntos() = game.say(self, "puntos" + self.puntos().toString())
+	method cantidadDeVidas() = game.say(self, "vidas " + self.vidas().toString())
 	
-	method restarVida(){ vidas = 0.max(vidas - 1)}
-	method puntos()=puntos
+	method cantidadDePuntos() = game.say(self, "puntos " + self.puntos().toString())
+	
+	method restarVida(){ vidas = 0.max(self.vidas () - 1)}
+	
+	method puntos() = puntos
+	
 	method sumarPunto(){puntos = puntos + 1}
 	
 	/*metodo que me permite moverme*/
@@ -114,7 +124,7 @@ class Combustible inherits ObjetoMovible {
 	}
 }
 
-/*clase para crear instancias de fondos distintos*/
+ /*clase para crear instancias de fondos distintos*/
  
 class Fondo {
 	

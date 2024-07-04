@@ -19,6 +19,6 @@ const nivel2 = new Nivel(
 		new Combustible(position = game.at(4,5))
 	]
 	,
-	
+	siguienteNivel = null,
 	posInicialJugador = game.at(6,0)
 )

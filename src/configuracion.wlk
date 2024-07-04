@@ -19,17 +19,21 @@ object configuracion {
 	}
 	
 	/*configuracion de inicio de juego mediante el enter */
-	method cargaYInicioDelJuego(estadoDelJuego){
+	method cargaYInicioDelJuego(imagenNivel,estadoDelJuego , nivel){
 		if(not estadoDelJuego.estaIniciado()){ //veo el estado de mi juego antes de iniciarlo
-				imagenInicio.remover()
-				nivel1.mostrar() //Muestra la imagen del nivel actual y pasa al juego
-				game.onTick(2000, "cargar nivel", { //Le añado un pequeño corto para que de margen y de esa manera insertar la img del nivel
-					gestorDeNiveles.nivelActual().iniciar()
-					gestorDeNiveles.verificarColision()
+				self.cambiarImagen(imagenNivel)
+				if(nivel != null){
+				 game.onTick(2000, "cargar nivel", { //Le añado un pequeño corto para que de margen y de esa manera insertar la img del nivel
+				 nivel.iniciar()
 				})
-				
-				estadoDelJuego.estaIniciado(true)
-			}
+				}
+				estadoDelJuego.cambiarValor(true)
+			}	
+	}
+	
+	/*configuro un metod*/
+	method cambiarImagen(imagenActual){
+		imagenActual.mostrar()	
 	}
 	
 	/*agrego al objeto juego en el escenario*/
