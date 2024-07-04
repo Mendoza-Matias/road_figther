@@ -96,8 +96,8 @@ class Nivel {
 		configuracion.agregarPersonajes(gestorDeNiveles.autoRojo(),posInicialJugador)
 		self.crearTodos(enemigos)
 		self.crearTodos(combustible)
-		game.onTick(500,"mover autos", {self.moverAutos(enemigos)}) /*cuando se carga el nivel los autos se moveran*/
-		game.onTick(500,"mover autos", {self.moverAutos(combustible)})
+		self.moverAutos(enemigos) /*cuando se carga el nivel los autos se moveran*/
+		self.moverAutos(combustible) 
 	}
 	
 	/*metodos encargados de la logica del escenario y los objetos involucrados*/

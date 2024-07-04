@@ -71,10 +71,11 @@ object jugador inherits ObjetoMovible {
 }
 
 class Enemigo inherits ObjetoMovible {
+	
 	var property image = "enemigo.png"
 	
 	method moverAutomaticamente(dir){
-		game.onTick(5000, "mover automaticamente", {
+		game.onTick(2000, "mover automaticamente", {
 			self.moverA(dir)
 		})
 	}
@@ -84,7 +85,8 @@ class Enemigo inherits ObjetoMovible {
         if (self.puedeMoverseA(proximaPosicion)) {
             position = proximaPosicion
         }else{
-        	position = game.at(position.x(), 11)
+        	
+        	position = game.at(0.randomUpTo(7).truncate(0) + 3, 11) /*me da un numero entre 0 y 6 + 3*/
         }
     }
     
@@ -102,7 +104,7 @@ class Combustible inherits ObjetoMovible {
 	var property image = "combustible.png"
 	
 	method moverAutomaticamente(dir){
-		game.onTick(5000, "mover automaticamente", {
+		game.onTick(2000, "mover automaticamente", {
 			self.moverA(dir)
 		})
 	}
@@ -112,7 +114,7 @@ class Combustible inherits ObjetoMovible {
         if (self.puedeMoverseA(proximaPosicion)) {
             position = proximaPosicion
         }else{
-        	position = game.at(position.x(), 11)
+        	position = game.at(0.randomUpTo(7).truncate(0) + 3, 11) /*me da un numero entre 0 y 6 + 3*/
         }
     }
     override method noSaleDeLaCarretera(posicion) = posicion.y() > - 2
@@ -128,11 +130,22 @@ class Combustible inherits ObjetoMovible {
  
 class Fondo {
 	
+	var property position = game.origin() 
 	var property image
-		
-	method position() = game.origin()
-	
+			
 	method crear(){
 		game.addVisual(self)
+		self.moverFondo()
+	}
+	
+	method moverFondo(){
+		game.onTick(1000, self.identity().toString() , {
+			var siguienteY = (position.y() - 1) % 20
+			position = game.at(position.x(),siguienteY)
+		})
+	}
+	
+	method detener(){
+		game.removeTickEvent(self.identity().toString())
 	}	
 }

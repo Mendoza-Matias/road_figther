@@ -23,7 +23,7 @@ object configuracion {
 		if(not estadoDelJuego.estaIniciado()){ //veo el estado de mi juego antes de iniciarlo
 				self.cambiarImagen(imagenNivel)
 				if(nivel != null){
-				 game.onTick(2000, "cargar nivel", { //Le añado un pequeño corto para que de margen y de esa manera insertar la img del nivel
+				 game.schedule(2000,{ //Le añado un pequeño corto para que de margen y de esa manera insertar la img del nivel
 				 nivel.iniciar()
 				})
 				}
