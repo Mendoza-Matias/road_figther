@@ -66,7 +66,7 @@ object jugador inherits ObjetoMovible {
 		}
 	}
 	
-	override method noSaleDeLaCarretera(posicion) =  posicion.x() > 2 and posicion.x() < 10 /*condicion de limite*/
+	override method noSaleDeLaCarretera(posicion) =  posicion.x() > 3 and posicion.x() < 9 /*condicion de limite*/
 	
 }
 
@@ -140,7 +140,7 @@ class Fondo {
 	
 	method moverFondo(){
 		game.onTick(1000, self.identity().toString() , {
-			var siguienteY = (position.y() - 1) % 20
+			var siguienteY = (position.y() - 1) % 30
 			position = game.at(position.x(),siguienteY)
 		})
 	}

@@ -10,11 +10,18 @@ object juego {
 	method iniciar() {
 		configuracion.pantallaConfig()
 		imagenInicio.mostrar()
+		self.reproducirSonidoInicial()
 		keyboard.enter().onPressDo{
 			configuracion.cargaYInicioDelJuego(visualNivel1,iniciado,gestorDeNiveles.nivelActual())
 		}
 		game.start()
 	}
+	method reproducirSonidoInicial(){
+		var  sound = game.sound("sonidos/game_start.wav")
+		game.schedule(500, { sound.play()} )
+		keyboard.enter().onPressDo({sound.stop()})
+	}
+	
 	
 	/*metodo que me dice que gane*/
 	method ganar(){

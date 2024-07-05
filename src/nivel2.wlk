@@ -4,7 +4,7 @@ import personajes.*
 
 const nivel2 = new Nivel(
 		
-	fondo = new Fondo(image="carretera.png"), /*agrego la imagen de la carretera*/
+	fondo = new Fondo(image="carreteranivel2.png"), /*agrego la imagen de la carretera*/
 	
 	enemigos = [
 		new Enemigo(position = game.at(5,2)),
