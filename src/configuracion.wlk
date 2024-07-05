@@ -3,6 +3,7 @@ import personajes.*
 import niveles.*
 import direcciones.*
 import visuales.*
+import juego.*
 
 
 /*objeto de configuracion del juego*/
@@ -47,8 +48,10 @@ object configuracion {
 	method configurarTeclas() {
 		keyboard.a().onPressDo({jugador.moverA(izquierda)})
 		keyboard.d().onPressDo({jugador.moverA(derecha)})
+		keyboard.enter().onPressDo({configuracion.cargaYInicioDelJuego(visualNivel1, estadoDelJuego, gestorDeNiveles.nivelActual())})
+        keyboard.r().onPressDo({juego.reiniciarDesdeCero()}) // Añadi configuración para la tecla "R", reinicia el juego en cualquier momento de las partidas,
+        													// no es lo mmismo que el enter en el game over/win
 	}
-	
 	
 
 }

@@ -76,7 +76,7 @@ class Enemigo inherits ObjetoMovible {
 	var property image = "enemigo.png"
 	
 	method moverAutomaticamente(dir){
-		game.onTick(2000, "mover automaticamente", {
+		game.onTick(200, "mover automaticamente", { // Cambiado a 200 ms para mayor fluidez
 			self.moverA(dir)
 		})
 	}
@@ -105,7 +105,7 @@ class Combustible inherits ObjetoMovible {
 	var property image = "combustible.png"
 	
 	method moverAutomaticamente(dir){
-		game.onTick(2000, "mover automaticamente", {
+		game.onTick(200, "mover automaticamente", { // Cambiado a 200 ms para mayor fluidez
 			self.moverA(dir)
 		})
 	}
@@ -140,7 +140,7 @@ class Fondo {
 	}
 	
 	method moverFondo(){
-		game.onTick(500, self.identity().toString() , {
+		game.onTick(100, self.identity().toString() , {  // Cambiado a 100 ms para mayor fluidez
 			var siguienteY = (position.y() - 1) % 35
 			position = game.at(position.x(),siguienteY)
 		})
