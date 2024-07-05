@@ -68,6 +68,7 @@ object jugador inherits ObjetoMovible {
 	
 	override method noSaleDeLaCarretera(posicion) =  posicion.x() > 3 and posicion.x() < 9 /*condicion de limite*/
 	
+	
 }
 
 class Enemigo inherits ObjetoMovible {
@@ -86,7 +87,7 @@ class Enemigo inherits ObjetoMovible {
             position = proximaPosicion
         }else{
         	
-        	position = game.at(0.randomUpTo(7).truncate(0) + 3, 11) /*me da un numero entre 0 y 6 + 3*/
+        	position = game.at(1.randomUpTo(5).truncate(0) + 3, 11) /*me da un numero entre 0 y 6 + 3*/
         }
     }
     
@@ -114,7 +115,7 @@ class Combustible inherits ObjetoMovible {
         if (self.puedeMoverseA(proximaPosicion)) {
             position = proximaPosicion
         }else{
-        	position = game.at(0.randomUpTo(7).truncate(0) + 3, 11) /*me da un numero entre 0 y 6 + 3*/
+        	position = game.at(1.randomUpTo(5).truncate(0) + 3, 11) /*me da un numero entre 0 y 6 + 3*/
         }
     }
     override method noSaleDeLaCarretera(posicion) = posicion.y() > - 2
@@ -139,13 +140,19 @@ class Fondo {
 	}
 	
 	method moverFondo(){
-		game.onTick(1000, self.identity().toString() , {
-			var siguienteY = (position.y() - 1) % 30
+		game.onTick(500, self.identity().toString() , {
+			var siguienteY = (position.y() - 1) % 35
 			position = game.at(position.x(),siguienteY)
 		})
+		var sound = game.sound("sonidos/motor_player.wav")
+		game.schedule(7000, { sound.play()} )
 	}
 	
 	method detener(){
 		game.removeTickEvent(self.identity().toString())
-	}	
+	}
+	method reproducirSonidoMotor(){
+		
+	}
+		
 }
