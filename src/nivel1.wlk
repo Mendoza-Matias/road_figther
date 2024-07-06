@@ -8,14 +8,14 @@ const nivel1 = new Nivel(
 	fondo = new Fondo(image="carretera.png"),
 	
 	enemigos = [
-        new Enemigo(position = game.at(4,11)), // cambie un poco las posiciones en este nivel
-        new Enemigo(position = game.at(3,12)),
-        new Enemigo(position = game.at(5,14)),
-        new Enemigo(position = game.at(3,13))
+        new Enemigo(position = game.at(6,16)), // cambie un poco las posiciones en este nivel
+        new Enemigo(position = game.at(5,15)),
+        new Enemigo(position = game.at(7,12))
     ],
     combustible = [
         new Combustible(position = game.at(6,14)),
-        new Combustible(position = game.at(5,12))
+        new Combustible(position = game.at(5,12)),
+        new Combustible(position = game.at(6,10))
 	]
 	,
 	siguienteNivel = nivel2,

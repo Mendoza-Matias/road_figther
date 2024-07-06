@@ -11,7 +11,10 @@ class Vehiculo {
 	/*metodo encargado de cargar la visual*/
 	method crear(){game.addVisual(self)} 
 	
-	method remover(){game.removeVisual(self)}
+	method remover(){
+		game.removeVisual(self)
+		game.schedule(500, {self.crear()}) /*vuelve a añadir el auto al juego*/
+	}
 }
 
 /*creo una clase que sea para los objetos que son movibles*/
@@ -76,7 +79,7 @@ class Enemigo inherits ObjetoMovible {
 	var property image = "enemigo.png"
 	
 	method moverAutomaticamente(dir){
-		game.onTick(200, "mover automaticamente", { // Cambiado a 200 ms para mayor fluidez
+		game.onTick(200, self.identity().toString(), { // Cambiado a 200 ms para mayor fluidez
 			self.moverA(dir)
 		})
 	}
@@ -105,7 +108,7 @@ class Combustible inherits ObjetoMovible {
 	var property image = "combustible.png"
 	
 	method moverAutomaticamente(dir){
-		game.onTick(200, "mover automaticamente", { // Cambiado a 200 ms para mayor fluidez
+		game.onTick(200, self.identity().toString() , { // Cambiado a 200 ms para mayor fluidez
 			self.moverA(dir)
 		})
 	}
@@ -124,7 +127,9 @@ class Combustible inherits ObjetoMovible {
 		jugador.sumarPunto()
 		self.remover()
 		jugador.cantidadDePuntos()
+		
 	}
+	
 }
 
  /*clase para crear instancias de fondos distintos*/

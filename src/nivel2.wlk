@@ -11,12 +11,11 @@ const nivel2 = new Nivel(
         new Enemigo(position = game.at(7,3)),
         new Enemigo(position = game.at(5,2)),
         new Enemigo(position = game.at(9,8)),
-        new Enemigo(position = game.at(7,7)),
-        new Enemigo(position = game.at(7,6))
+        new Enemigo(position = game.at(3,7)),
+        new Enemigo(position = game.at(7,10))
     ],
     combustible = [
-        new Combustible(position = game.at(6,7)),
-        new Combustible(position = game.at(4,5))
+        new Combustible(position = game.at(6,7))
 	]
 	,
 	siguienteNivel = null,

@@ -22,10 +22,9 @@ object gestorDeNiveles {
 		cambioDeNivel = true
 	}
 	
-		
-	method nivelActual()= nivelActual
+	method nivelActual() = nivelActual
 	
-	method cambiarDeNivel(nuevoNivel){
+	method cambiarDeNivel(nuevoNivel) {
 		nivelActual = nuevoNivel
 	}	
 	
@@ -33,45 +32,41 @@ object gestorDeNiveles {
 	
 	method ultimoNivel() = self.nivelActual().siguienteNivel () == null
 	
-	  method cambiarDeNivel() {
+	method cambiarDeNivel() {
 	  	/*condicion que delimita mi cambio */
-	  	if(self.autoRojo().puntos() == 2 and not self.ultimoNivel()){
+	  	if (self.autoRojo().puntos() == 2 and not self.ultimoNivel()) {
             game.clear() 
             estadoDelJuego.cambiarValor(false)
-            self.autoRojo().reiniciarPuntos() //reinicio los puntos para evitar que se genere un bucle en el llamado
-            self.autoRojo().reiniciarVidas() //reinicio las vidas para evitar que se genere un bucle en el llamado
+            self.autoRojo().reiniciarPuntos() // reinicio los puntos para evitar que se genere un bucle en el llamado
+            self.autoRojo().reiniciarVidas() // reinicio las vidas para evitar que se genere un bucle en el llamado
             self.cambiarDeNivel(nivel2)
-            configuracion.cargaYInicioDelJuego(visualNivel2,estadoDelJuego,nivel2)
-    	}
-    	else if(self.autoRojo().vidas() == 0)
-    	{	
+            configuracion.cargaYInicioDelJuego(visualNivel2, estadoDelJuego, nivel2)
+    	} else if (self.autoRojo().vidas() == 0) {	
     		game.clear() 
     		estadoDelJuego.cambiarValor(false)
-    		configuracion.cargaYInicioDelJuego( imagenGameOver,estadoDelJuego,null)
-    		keyboard.enter().onPressDo{
+    		configuracion.cargaYInicioDelJuego(imagenGameOver, estadoDelJuego, null)
+    		var sound = game.sound("sonidos/game_over.wav")
+    		game.schedule(500, {sound.play()})
+    		keyboard.enter().onPressDo {
     			juego.iniciar()
     		}
-    		
-    	}
-    	/*{
+    	}else if(self.ultimoNivel() and self.autoRojo().puntos() == 2){
     		game.clear() 
     		estadoDelJuego.cambiarValor(false)
-    		configuracion.cargaYInicioDelJuego( imagenGameOver,estadoDelJuego,null)
-    	}*/
-    	
+    		configuracion.cargaYInicioDelJuego(imagenGameOver, estadoDelJuego, null) /*añadir imagen win*/
+    	}
     }
 	
 	
-	method verificarColision(){ /*verifica si el auto rojo choco ya sea a un Enemigo y a un Combustible*/
-		game.whenCollideDo(self.autoRojo(),{auto =>
+	method verificarColision() { /*verifica si el auto rojo choco ya sea a un Enemigo y a un Combustible*/
+		game.whenCollideDo(self.autoRojo(), {auto =>
 			auto.choco()
 		})
 	}
 	
-	  method actualizar() { /*Nuevo método para actualizar el estado del juego*/
+	method actualizar() { /*Nuevo método para actualizar el estado del juego*/
         self.cambiarDeNivel()
     }
-
 }
 
 class Nivel {
@@ -84,16 +79,16 @@ class Nivel {
 	var property fondo /*fondo de carretera*/
 	
 	/*encargado de iniciar el juego - es llamado en el archivo juego.wlk */
-	method iniciar(){
+	method iniciar() {
 		 self.cargarEscenario()
 		 gestorDeNiveles.verificarColision()
-	     game.onTick(1000, "cambiar nivel", {gestorDeNiveles.actualizar()})
+	     game.onTick(1000, self.identity().toString(), {gestorDeNiveles.actualizar()})
 	}
 	
 	method cargarEscenario() {
 		game.clear()
 		self.crearCarretera(fondo)
-		configuracion.agregarPersonajes(gestorDeNiveles.autoRojo(),posInicialJugador)
+		configuracion.agregarPersonajes(gestorDeNiveles.autoRojo(), posInicialJugador)
 		self.crearTodos(enemigos)
 		self.crearTodos(combustible)
 		self.moverAutos(enemigos) /*cuando se carga el nivel los autos se moveran*/
@@ -102,17 +97,25 @@ class Nivel {
 	
 	/*metodos encargados de la logica del escenario y los objetos involucrados*/
 	
-	method crearCarretera(fondoActual){
+	method crearCarretera(fondoActual) {
 		fondoActual.crear()
 	}
 	
-	method crearTodos(listaDeObjetos){
+	method crearTodos(listaDeObjetos) {
 		listaDeObjetos.forEach({objeto => objeto.crear()})
 	}
 	
-	method moverAutos(listaDeObjetos){
+	method moverAutos(listaDeObjetos) {
 		/*recorre la lista de enemigos y los hace moverse*/
 		listaDeObjetos.forEach({objeto => objeto.moverAutomaticamente(abajo)})
 	}
 	
+	method volverACrear() {
+        if (self.enemigos().size() < 2) {
+            const nuevoEnemigo = new Enemigo(position = game.at(1.randomUpTo(5).truncate(0) + 3, 11))
+            self.enemigos().add(nuevoEnemigo)
+            nuevoEnemigo.crear()
+            nuevoEnemigo.moverAutomaticamente(abajo)
+        }
+    }
 }
