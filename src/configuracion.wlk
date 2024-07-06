@@ -12,7 +12,7 @@ object configuracion {
 	
 	/*metodo de configuracion basica de la pantalla */
 	method pantallaConfig (){
-		game.title("road fighter")
+		game.title("Road fighter")
 		game.width(12)
 		game.height(10)
 		game.cellSize(64)

@@ -90,7 +90,7 @@ class Enemigo inherits ObjetoMovible {
             position = proximaPosicion
         }else{
         	
-        	position = game.at(1.randomUpTo(5).truncate(0) + 3, 11) /*me da un numero entre 0 y 6 + 3*/
+        	position = game.at(1.randomUpTo(6).truncate(0) + 3, 11) /*me da un numero entre 0 y 6 + 3*/
         }
     }
     
@@ -118,7 +118,7 @@ class Combustible inherits ObjetoMovible {
         if (self.puedeMoverseA(proximaPosicion)) {
             position = proximaPosicion
         }else{
-        	position = game.at(1.randomUpTo(5).truncate(0) + 3, 11) /*me da un numero entre 0 y 6 + 3*/
+        	position = game.at(1.randomUpTo(6).truncate(0) + 3, 11) /*me da un numero entre 0 y 6 + 3*/
         }
     }
     override method noSaleDeLaCarretera(posicion) = posicion.y() > - 2
@@ -149,8 +149,8 @@ class Fondo {
 			var siguienteY = (position.y() - 1) % 35
 			position = game.at(position.x(),siguienteY)
 		})
-		var sound = game.sound("sonidos/motor_player.wav")
-		game.schedule(7000, { sound.play()} )
+		/*var sound = game.sound("sonidos/motor_player.wav")
+		game.schedule(7000, { sound.play()} )*/
 	}
 	
 	method detener(){

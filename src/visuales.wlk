@@ -17,4 +17,4 @@ class Visual {
 	const visualNivel1 = new Visual(image = "uno.png")
 	const visualNivel2= new Visual(image = "dos.png")
 	const imagenGameOver = new Visual(image = "perdido.png")
-	const win = new Visual(image = "")
+	const win = new Visual(image = "ganar.png")

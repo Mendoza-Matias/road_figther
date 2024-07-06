@@ -12,27 +12,19 @@ object juego {
 		configuracion.pantallaConfig()
 		imagenInicio.mostrar()
 		self.reproducirSonidoInicial()
+		self.configurarTeclasIniciales()
 		configuracion.configurarTeclas() // Modificacion para que ande la tecla R de reinicio
-		keyboard.enter().onPressDo{
-			if (estadoDelJuego.estaIniciado()) {
-				configuracion.cargaYInicioDelJuego(visualNivel1, iniciado, gestorDeNiveles.nivelActual())
-			} else {
-				self.reiniciarDesdeCero()
-			}
-		}
-		keyboard.r().onPressDo {
-			self.reiniciarDesdeCero()
-		}
 		
 		game.start()
 	}
 	
-	method reiniciarDesdeCero() { // Deberia hacer que al resetear tanto con "enter" o "r", se pueda volver a iniciar el juego con enter
+	method reiniciarDesdeCero() { 
         // Reinicia el estado del juego
+        game.clear()
         estadoDelJuego.cambiarValor(false)
         jugador.reiniciarVidas()
         jugador.reiniciarPuntos()
-        game.clear()
+        // configuracion.cargaYInicioDelJuego(visualNivel1, iniciado, gestorDeNiveles.nivelActual())
         self.iniciar() // Vuelve a llamar a iniciar para empezar desde cero
     }
     
@@ -43,16 +35,36 @@ object juego {
 	}
 	
 	
-	/*metodo que me dice que gane*/
+	//metodo que me dice que gane/
 	method ganar(){
 		game.clear()
+		win.mostrar()
+		estadoDelJuego.cambiarValor(false)
+		self.configurarTeclasReinicio()
 	}
 	
-	/*metodo que me dice que game over , agrega la pantalla*/
+	//metodo que me dice que game over , agrega la pantalla/
 	method perder(){
 		imagenGameOver.mostrar()
         estadoDelJuego.cambiarValor(false)
+        self.configurarTeclasReinicio()
 	}
+	
+	method configurarTeclasIniciales(){
+		 keyboard.enter().onPressDo({
+            configuracion.cargaYInicioDelJuego(visualNivel1, iniciado, gestorDeNiveles.nivelActual())
+        })
+        
+        keyboard.r().onPressDo({
+            self.reiniciarDesdeCero()
+        })
+	}
+	
+	method configurarTeclasReinicio() {
+        keyboard.enter().onPressDo({
+            self.reiniciarDesdeCero()
+        })
+    }
 	
 }
  /*Objeto que se encarga de manejar el estado de mi juego*/

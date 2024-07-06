@@ -34,30 +34,45 @@ object gestorDeNiveles {
 	
 	method cambiarDeNivel() {
 	  	/*condicion que delimita mi cambio */
-	  	if (self.autoRojo().puntos() == 2 and not self.ultimoNivel()) {
-            game.clear() 
+	  	if (self.autoRojo().puntos() == 10 and not self.ultimoNivel()) {
+            self.pasarDeNivel()
+    	} else if (self.autoRojo().vidas() == 0) {	
+    		self.perderJuego()
+    		}
+    	else if(self.ultimoNivel() and self.autoRojo().puntos() == 10){
+    		self.ganarJuego()
+    	}
+    }
+    method pasarDeNivel(){
+    	game.clear() 
             estadoDelJuego.cambiarValor(false)
             self.autoRojo().reiniciarPuntos() // reinicio los puntos para evitar que se genere un bucle en el llamado
             self.autoRojo().reiniciarVidas() // reinicio las vidas para evitar que se genere un bucle en el llamado
             self.cambiarDeNivel(nivel2)
             configuracion.cargaYInicioDelJuego(visualNivel2, estadoDelJuego, nivel2)
-    	} else if (self.autoRojo().vidas() == 0) {	
-    		game.clear() 
+    }
+    
+    method perderJuego(){
+    	game.clear() 
     		estadoDelJuego.cambiarValor(false)
     		configuracion.cargaYInicioDelJuego(imagenGameOver, estadoDelJuego, null)
     		var sound = game.sound("sonidos/game_over.wav")
     		game.schedule(500, {sound.play()})
     		keyboard.enter().onPressDo {
     			juego.iniciar()
-    		}
-    	}else if(self.ultimoNivel() and self.autoRojo().puntos() == 2){
-    		game.clear() 
+		}
+	}
+	method ganarJuego(){
+		game.clear() 
     		estadoDelJuego.cambiarValor(false)
-    		configuracion.cargaYInicioDelJuego(imagenGameOver, estadoDelJuego, null) /*añadir imagen win*/
-    	}
-    }
-	
-	
+    		configuracion.cargaYInicioDelJuego(win, estadoDelJuego, null)
+    		var sound = game.sound("sonidos/win.wav")
+    		game.schedule(500, {sound.play()})
+    		keyboard.enter().onPressDo {
+    			juego.iniciar()}
+    		 /*añadir imagen win*/
+    		 
+	}
 	method verificarColision() { /*verifica si el auto rojo choco ya sea a un Enemigo y a un Combustible*/
 		game.whenCollideDo(self.autoRojo(), {auto =>
 			auto.choco()
@@ -112,7 +127,7 @@ class Nivel {
 	
 	method volverACrear() {
         if (self.enemigos().size() < 2) {
-            const nuevoEnemigo = new Enemigo(position = game.at(1.randomUpTo(5).truncate(0) + 3, 11))
+            const nuevoEnemigo = new Enemigo(position = game.at(0.randomUpTo(6).truncate(0) + 3, 11))
             self.enemigos().add(nuevoEnemigo)
             nuevoEnemigo.crear()
             nuevoEnemigo.moverAutomaticamente(abajo)
