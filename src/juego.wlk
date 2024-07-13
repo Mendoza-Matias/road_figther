@@ -24,7 +24,7 @@ object juego {
         estadoDelJuego.cambiarValor(false)
         jugador.reiniciarVidas()
         jugador.reiniciarPuntos()
-        // configuracion.cargaYInicioDelJuego(visualNivel1, iniciado, gestorDeNiveles.nivelActual())
+        configuracion.cargaYInicioDelJuego(visualNivel1, iniciado, gestorDeNiveles.nivelActual())
         self.iniciar() // Vuelve a llamar a iniciar para empezar desde cero
     }
     
